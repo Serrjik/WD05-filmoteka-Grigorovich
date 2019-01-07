@@ -2,7 +2,7 @@
 
 	// mysqli_connect(server, user, pass, db-name);
 	// DB connection
-	$link = mysqli_connect('localhost', 'root', '', 'mini-site');
+	$link = mysqli_connect('localhost', 'root', '', 'new-mini-site');
 
 	// Возвращает ошибку в случае если не получилось соединиться с базой данных
 	// mysqli_connect_error();
