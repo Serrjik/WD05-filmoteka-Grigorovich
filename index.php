@@ -2,124 +2,105 @@
 
 	// mysqli_connect(server, user, pass, db-name);
 	// DB connection
-	$link = mysqli_connect('localhost', 'root', '', 'new-mini-site');
+	$link = mysqli_connect('localhost', 'root', '', 'WD05-filmoteka-Grigorovich');
 
 	// Возвращает ошибку в случае если не получилось соединиться с базой данных
 	// mysqli_connect_error();
-
-/*	if ( mysqli_connect_error() ) {
-		echo "Ошибка подключения к базе данных.";
-	} else {
-		echo "Подключение прошло успешно!";
-	}*/
 
 	if ( mysqli_connect_error() ) {
 		// Полностью блокирует выполнение скрипта
 		die("Ошибка подключения к базе данных.");
 	}
 
-	// Add user to DB from Form
+	// Add film to DB from Form
 	print_r($_POST);
 
-	if ( array_key_exists('add-user', $_POST) ) {
-		if ( $_POST['name'] == '' ) {
-			echo "<p>Необходимо ввести имя!</p>";
-		} else if ( $_POST['password'] == '' ) {
-			echo "<p>Необходимо ввести пароль!</p>";
-		} else if ( $_POST['email'] == '' ) {
-			echo "<p>Необходимо ввести Email!</p>";
+	if ( array_key_exists('newFilm', $_POST) && ($_POST['newFilm'] == "Добавить" ) ) {
+		if ( trim($_POST['title']) == '' ) {
+			echo '<div class="notify notify--error mb-20">Название фильма не может быть пустым.</div>';
+		} else if ( trim($_POST['genre']) == '' ) {
+			echo '<div class="notify notify--error mb-20">Жанр фильма не может быть пустым.</div>';
+		} else if ( trim($_POST['year']) == '' ) {
+			echo '<div class="notify notify--error mb-20">Год выхода фильма не может быть пустым.</div>';
 		} else {
-			$query = "INSERT INTO `users` (`name`, `email`, `password`) VALUES (
-			'" . mysqli_real_escape_string($link, $_POST['name']) . "',
-			'" . mysqli_real_escape_string($link, $_POST['email']) . "',
-			'" . mysqli_real_escape_string($link, $_POST['password']) . "'
+			$query = "INSERT INTO `films` (`title`, `genre`, `year`) VALUES (
+			'" . mysqli_real_escape_string($link, trim($_POST['title'])) . "',
+			'" . mysqli_real_escape_string($link, trim($_POST['genre'])) . "',
+			'" . mysqli_real_escape_string($link, trim($_POST['year'])) . "'
 		)";
 
 		if ( mysqli_query($link, $query) ) {
-			echo "<p>Пользователь был добавлен!</p>";
+			echo "<p>Фильм был добавлен!</p>";
 		} else 
-			echo "<p>Пользователь НЕ был добавлен! Произошла ошибка</p>";
+			echo "<p>Фильм НЕ был добавлен! Произошла ошибка</p>";
 		}
 	}
 
-	// $query = "INSERT INTO `users` (`email`, `password`) VALUES ('joker@mail.ru', '777')";
-
-	// LIMIT 1 - ограничение изменений на изменения только в 1 ряду
-
-	// $query = "UPDATE `users` SET `email` = 'joker@hotmail.org' WHERE `id` = 3 LIMIT 1";
-	
-	// $query = "UPDATE `users` SET `password` = '654321' WHERE `email` = 'joker@hotmail.org' LIMIT 1";
-
-	// $query = "SELECT * FROM `users` WHERE `id` = 1";
-	// $query = "SELECT * FROM `users` WHERE `email` = 'joker@hotmail.org'";
-
-	// LIKE - выбирает те записи, которые выглядят как заданная, т.е. не строго равные
-	// $query = "SELECT * FROM `users` WHERE `email` LIKE 'joker@hotmail.org'";
-
-	// % в данном запросе означает любое количество любых символов
-	// $query = "SELECT * FROM `users` WHERE `email` LIKE '%hotmail.com'";
-	// $query = "SELECT * FROM `users` WHERE `email` LIKE '%man%'";
-	// $query = "SELECT * FROM `users` WHERE `id` > 5";
-	// $query = "SELECT * FROM `users` WHERE `id` >= 5";
-	// $query = "SELECT * FROM `users` WHERE `id` >= 2 AND `email` LIKE '%hotmail.com'";
-
-	// $name = "Brayan O\'Konor";
-	// $name = "Brayan O'Konor";
-
-	// Функция mysqli_real_escape_string($link, $name) экранирует символы
-
-	// $query = "SELECT * FROM `users` WHERE `name` = '" .
-	/*mysqli_real_escape_string($link, $name) .
-	"'";*/
-
-	// QUERY USERS
-	$query = "SELECT * FROM `users`";
-	$users = array();
+	// QUERY for films
+	$query = "SELECT * FROM `films`";
+	$films = array();
 
 	if ( $result = mysqli_query($link, $query) ) {
 		
 		while ( $row = mysqli_fetch_array($result) ) {
-			$users[] = $row;
+			$films[] = $row;
 		}
 	}
 
 ?>
 
-<h1>ТАБЛИЦА С ПОЛЬЗОВАТЕЛЯМИ</h1>
+<!DOCTYPE html>
+<html lang="ru">
 
-<table border="1">
-	<thead>
-		<tr>
-			<th>ID</th>
-			<th>Имя</th>
-			<th>Email</th>
-			<th>Пароль</th>
-		</tr>
-	</thead>
-	<tbody>
+<head>
+	<meta charset="UTF-8" />
+	<title>[Имя и фамилия] - Фильмотека</title>
+	<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"/><![endif]-->
+	<meta name="keywords" content="" />
+	<meta name="description" content="" /><!-- build:cssVendor css/vendor.css -->
+	<link rel="stylesheet" href="libs/normalize-css/normalize.css" />
+	<link rel="stylesheet" href="libs/bootstrap-4-grid/grid.min.css" />
+	<link rel="stylesheet" href="libs/jquery-custom-scrollbar/jquery.custom-scrollbar.css" /><!-- endbuild -->
+	<!-- build:cssCustom css/main.css -->
+	<link rel="stylesheet" href="./css/main.css" /><!-- endbuild -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800&amp;subset=cyrillic-ext" rel="stylesheet">
+	<!--[if lt IE 9]><script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script><![endif]-->
+</head>
 
+<body class="index-page">
+	<div class="container user-content section-page">
+		<div class="title-1">Фильмотека</div>
 		<?php
-
-		foreach ($users as $key => $value) {
+			foreach ($films as $recordNumber => $value) { ?>
+				<div class="card mb-20">
+					<h4 class="title-4"><?=$films[$recordNumber]['title']?></h4>
+					<div class="badge"><?=$films[$recordNumber]['genre']?></div>
+					<div class="badge"><?=$films[$recordNumber]['year']?></div>
+				</div>
+			<?php }
 		?>
-		<tr>
-			<td><?php echo $users[$key]['id'] ?></td>
-			<td><?php echo $users[$key]['name']; ?></td>
-			<td><?php echo $users[$key]['email']; ?></td>
-			<td><?php echo $users[$key]['password']; ?></td>
-		</tr>
-		<?php
-		}
+		<div class="panel-holder mt-80 mb-40">
+			<div class="title-3 mt-0">Добавить фильм</div>
+			<form action="index.php" method="POST">
+				<div class="form-group"><label class="label">Название фильма<input class="input" name="title" type="text" placeholder="Такси 2" /></label></div>
+				<div class="row">
+					<div class="col">
+						<div class="form-group"><label class="label">Жанр<input class="input" name="genre" type="text" placeholder="комедия" /></label></div>
+					</div>
+					<div class="col">
+						<div class="form-group"><label class="label">Год<input class="input" name="year" type="text" placeholder="2000" /></label></div>
+					</div>
+				</div><input class="button" type="submit" name="newFilm" value="Добавить" />
+			</form>
+		</div>
+	</div><!-- build:jsLibs js/libs.js -->
+	<script src="libs/jquery/jquery.min.js"></script><!-- endbuild -->
+	<!-- build:jsVendor js/vendor.js -->
+	<script src="libs/jquery-custom-scrollbar/jquery.custom-scrollbar.js"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIr67yxxPmnF-xb4JVokCVGgLbPtuqxiA"></script><!-- endbuild -->
+	<!-- build:jsMain js/main.js -->
+	<script src="js/main.js"></script><!-- endbuild -->
+	<script defer="defer" src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+</body>
 
-		?>
-	</tbody>
-</table>
-
-<h2>ФОРМА ДОБАВЛЕНИЯ ПОЛЬЗОВАТЕЛЯ</h2>
-
-<form action="index.php" method="POST">
-	<input type="text" placeholder="Введите имя" name="name">
-	<input type="email" placeholder="Введите email" name="email">
-	<input type="password" placeholder="Введите пароль" name="password">
-	<input type="submit" value="Добавить пользователя" name="add-user">
-</form>
+</html>
