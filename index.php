@@ -1,27 +1,24 @@
 <?php
 
-	// mysqli_connect(server, user, pass, db-name);
 	// DB connection
 	$link = mysqli_connect('localhost', 'root', '', 'WD05-filmoteka-Grigorovich');
 
 	// Возвращает ошибку в случае если не получилось соединиться с базой данных
-	// mysqli_connect_error();
-
 	if ( mysqli_connect_error() ) {
 		// Полностью блокирует выполнение скрипта
 		die("Ошибка подключения к базе данных.");
 	}
 
 	// Add film to DB from Form
-	print_r($_POST);
+	$resultOfInsertion = '';
 
 	if ( array_key_exists('newFilm', $_POST) && ($_POST['newFilm'] == "Добавить" ) ) {
 		if ( trim($_POST['title']) == '' ) {
-			echo '<div class="notify notify--error mb-20">Название фильма не может быть пустым.</div>';
+			$resultOfInsertion = '<div class="notify notify--error mb-20">Название фильма не может быть пустым.</div>';
 		} else if ( trim($_POST['genre']) == '' ) {
-			echo '<div class="notify notify--error mb-20">Жанр фильма не может быть пустым.</div>';
+			$resultOfInsertion = '<div class="notify notify--error mb-20">Жанр фильма не может быть пустым.</div>';
 		} else if ( trim($_POST['year']) == '' ) {
-			echo '<div class="notify notify--error mb-20">Год выхода фильма не может быть пустым.</div>';
+			$resultOfInsertion = '<div class="notify notify--error mb-20">Год выхода фильма не может быть пустым.</div>';
 		} else {
 			$query = "INSERT INTO `films` (`title`, `genre`, `year`) VALUES (
 			'" . mysqli_real_escape_string($link, trim($_POST['title'])) . "',
@@ -30,9 +27,9 @@
 		)";
 
 		if ( mysqli_query($link, $query) ) {
-			echo "<p>Фильм был добавлен!</p>";
-		} else 
-			echo "<p>Фильм НЕ был добавлен! Произошла ошибка</p>";
+			$resultOfInsertion = '<div class="notify notify--success mb-20">Фильм был добавлен!</div>';
+		} else
+			$resultOfInsertion = '<div class="notify notify--error mb-20">Фильм НЕ был добавлен! Произошла ошибка</div>';
 		}
 	}
 
@@ -81,6 +78,10 @@
 		?>
 		<div class="panel-holder mt-80 mb-40">
 			<div class="title-3 mt-0">Добавить фильм</div>
+			<?php if ( $resultOfInsertion != '' ) {
+				echo $resultOfInsertion;
+				}
+			?>
 			<form action="index.php" method="POST">
 				<div class="form-group"><label class="label">Название фильма<input class="input" name="title" type="text" placeholder="Такси 2" /></label></div>
 				<div class="row">
