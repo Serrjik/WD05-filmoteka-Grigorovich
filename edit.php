@@ -14,7 +14,7 @@
 	$resultOfRemoval = '';
 
 	// Delete film from DB
-	if ( $_GET ) {
+/*	if ( $_GET ) {
 		if ( $_GET['action'] == 'delete' ) {
 
 			// query for delete film
@@ -27,11 +27,45 @@
 			}
 		}
 
+	}*/
+
+	// Edit film
+	if ( $_GET ) {
+		if ( $_GET['action'] == 'edit' ) {
+
+			// query for edit film
+			$query = "SELECT * FROM `films` WHERE id = '" . mysqli_real_escape_string($link, $_GET['id']) . "'";
+
+			$result = mysqli_query($link, $query);
+
+			if ( mysqli_affected_rows($link) == 1 ) {
+				$film = mysqli_fetch_array($result);
+				// echo "<pre>";
+				// print_r($film);
+				// echo "</pre>";
+
+			}
+
+		}
+	}
+
+	if ( $_GET ) {
+		if ($_GET['name'] == 'editFilm' ) {
+			$insertionQuery = "INSERT INTO films 
+			(title, genre, year) 
+			VALUES (
+			'" . mysqli_real_escape_string($link, trim($_POST['title'])) . "', 
+			'" . mysqli_real_escape_string($link, trim($_POST['genre'])) . "', 
+			'" . mysqli_real_escape_string($link, trim($_POST['year'])) . "'
+			)";
+			
+		}
+
 	}
 
 	// Add film to DB from Form
 
-	if ( array_key_exists('newFilm', $_POST) && ($_POST['newFilm'] == "Добавить" ) ) {
+/*	if ( array_key_exists('newFilm', $_POST) && ($_POST['newFilm'] == "Добавить" ) ) {
 		if ( trim($_POST['title']) == '' ) {
 			$resultOfInsertion = '<div class="notify notify--error mb-20">Название фильма не может быть пустым.</div>';
 		} else if ( trim($_POST['genre']) == '' ) {
@@ -50,10 +84,10 @@
 		} else
 			$resultOfInsertion = '<div class="notify error mb-20">Фильм НЕ был добавлен! Произошла ошибка</div>';
 		}
-	}
+	}*/
 
 	// QUERY for films
-	$query = "SELECT * FROM `films`";
+/*	$query = "SELECT * FROM `films`";
 	$films = array();
 
 	if ( $result = mysqli_query($link, $query) ) {
@@ -61,7 +95,7 @@
 		while ( $row = mysqli_fetch_array($result) ) {
 			$films[] = $row;
 		}
-	}
+	}*/
 
 ?>
 
@@ -91,36 +125,37 @@
 				echo $resultOfRemoval;
 			}
 
-			foreach ($films as $recordNumber => $value) { ?>
+/*			foreach ($films as $recordNumber => $value) { ?>
 				<div class="card mb-20">
 					<div class="card__header">
 						<h4 class="title-4"><?=$films[$recordNumber]['title']?></h4>
-						<div>
-							<a class="button button--editsmall" href="edit.php?action=edit&id=<?=$films[$recordNumber]['id']?>">Редактировать</a>
-							<a class="button button--removesmall" href="?action=delete&id=<?=$films[$recordNumber]['id']?>">Удалить</a>
-						</div>
+						<a class="button button--remove" href="?action=delete&id=<?=$films[$recordNumber]['id']?>">Удалить</a>
 					</div>
 					<div class="badge"><?=$films[$recordNumber]['genre']?></div>
 					<div class="badge"><?=$films[$recordNumber]['year']?></div>
 				</div>
-			<?php }
+			<?php }*/
 		?>
 		<div class="panel-holder mt-80 mb-40">
-			<div class="title-3 mt-0">Добавить фильм</div>
+			<div class="title-3 mt-0">Редактировать фильм</div>
 			<?php if ( $resultOfInsertion != '' ) {
 				echo $resultOfInsertion;
 				}
 			?>
-			<form action="index.php" method="POST">
-				<div class="form-group"><label class="label">Название фильма<input class="input" name="title" type="text" placeholder="Такси 2" /></label></div>
+			<?php
+				$id = mysqli_real_escape_string($link, $_GET['id']);
+			?>
+
+			<form action="index.php" method="GET">
+				<div class="form-gr`oup"><label class="label">Название фильма<input class="input" name="title" type="text" placeholder="<?=$film['title']?>" /></label></div>
 				<div class="row">
 					<div class="col">
-						<div class="form-group"><label class="label">Жанр<input class="input" name="genre" type="text" placeholder="комедия" /></label></div>
+						<div class="form-group"><label class="label">Жанр<input class="input" name="genre" type="text" placeholder="<?=$film['genre']?>" /></label></div>
 					</div>
 					<div class="col">
-						<div class="form-group"><label class="label">Год<input class="input" name="year" type="text" placeholder="2000" /></label></div>
+						<div class="form-group"><label class="label">Год<input class="input" name="year" type="text" placeholder="<?=$film['year']?>" /></label></div>
 					</div>
-				</div><input class="button" type="submit" name="newFilm" value="Добавить" />
+				</div><input class="button" type="submit" name="editFilm" value="Изменить информацию" />
 			</form>
 		</div>
 	</div><!-- build:jsLibs js/libs.js -->
