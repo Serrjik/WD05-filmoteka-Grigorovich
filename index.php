@@ -70,7 +70,7 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<title>[Имя и фамилия] - Фильмотека</title>
+	<title>Сергей Григорович - Фильмотека</title>
 	<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"/><![endif]-->
 	<meta name="keywords" content="" />
 	<meta name="description" content="" /><!-- build:cssVendor css/vendor.css -->
