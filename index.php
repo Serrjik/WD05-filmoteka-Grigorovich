@@ -9,8 +9,27 @@
 		die("Ошибка подключения к базе данных.");
 	}
 
-	// Add film to DB from Form
+	// Set initial values of variables
 	$resultOfInsertion = '';
+	$resultOfRemoval = '';
+
+	// Delete film from DB
+	if ( $_GET ) {
+		if ( $_GET['action'] == 'delete' ) {
+
+			// query for delete film
+			$query = "DELETE FROM films WHERE id = '" . mysqli_real_escape_string($link, $_GET['id']) . "'";
+
+			mysqli_query($link, $query);
+
+			if ( mysqli_affected_rows($link) == 1 ) {
+				$resultOfRemoval = '<div class="notify notify--info mb-20">Фильм был удалён!</div>';
+			}
+		}
+
+	}
+
+	// Add film to DB from Form
 
 	if ( array_key_exists('newFilm', $_POST) && ($_POST['newFilm'] == "Добавить" ) ) {
 		if ( trim($_POST['title']) == '' ) {
@@ -29,12 +48,12 @@
 		if ( mysqli_query($link, $query) ) {
 			$resultOfInsertion = '<div class="notify notify--success mb-20">Фильм был добавлен!</div>';
 		} else
-			$resultOfInsertion = '<div class="notify notify--error mb-20">Фильм НЕ был добавлен! Произошла ошибка</div>';
+			$resultOfInsertion = '<div class="notify error mb-20">Фильм НЕ был добавлен! Произошла ошибка</div>';
 		}
 	}
 
 	// QUERY for films
-	$query = "SELECT * FROM `films`";
+	$query = "SELECT * FROM `films` ORDER BY id DESC";
 	$films = array();
 
 	if ( $result = mysqli_query($link, $query) ) {
@@ -51,7 +70,7 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<title>[Имя и фамилия] - Фильмотека</title>
+	<title>Сергей Григорович - Фильмотека</title>
 	<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"/><![endif]-->
 	<meta name="keywords" content="" />
 	<meta name="description" content="" /><!-- build:cssVendor css/vendor.css -->
@@ -68,9 +87,19 @@
 	<div class="container user-content section-page">
 		<div class="title-1">Фильмотека</div>
 		<?php
+			if ( $resultOfRemoval ) {
+				echo $resultOfRemoval;
+			}
+
 			foreach ($films as $recordNumber => $value) { ?>
 				<div class="card mb-20">
-					<h4 class="title-4"><?=$films[$recordNumber]['title']?></h4>
+					<div class="card__header">
+						<h4 class="title-4"><?=$films[$recordNumber]['title']?></h4>
+						<div>
+							<a class="button button--editsmall" href="edit.php?action=edit&id=<?=$films[$recordNumber]['id']?>">Редактировать</a>
+							<a class="button button--removesmall" href="?action=delete&id=<?=$films[$recordNumber]['id']?>">Удалить</a>
+						</div>
+					</div>
 					<div class="badge"><?=$films[$recordNumber]['genre']?></div>
 					<div class="badge"><?=$films[$recordNumber]['year']?></div>
 				</div>
