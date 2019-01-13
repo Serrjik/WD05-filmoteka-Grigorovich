@@ -1,4 +1,10 @@
 <?php
+	require_once ('header.tpl'); // подключение файла
+	echo "<br>";
+	require_once ('header.tpl'); // подключение файла
+	echo "<br>";
+	require_once ('header.tpl'); // подключение файла
+	echo "<br>";
 
 	// mysqli_connect(server, user, pass, db-name);
 	// DB connection
@@ -19,7 +25,7 @@
 	}
 
 	// Add user to DB from Form
-	print_r($_POST);
+	// print_r($_POST);
 
 	if ( array_key_exists('add-user', $_POST) ) {
 		if ( $_POST['name'] == '' ) {
