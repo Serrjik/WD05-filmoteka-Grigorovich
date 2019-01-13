@@ -17,29 +17,38 @@
 	// Update film in DB from Form
 	if ( array_key_exists('editFilm', $_POST) && ($_POST['editFilm'] == "Изменить информацию" ) ) {
 		if ( trim($_POST['title']) == '' ) {
-			$resultOfUpdating = '<div class="notify notify--error mb-20">Название фильма не может быть пустым.</div>';
-		} else if ( trim($_POST['genre']) == '' ) {
-			$resultOfUpdating = '<div class="notify notify--error mb-20">Жанр фильма не может быть пустым.</div>';
-		} else if ( trim($_POST['year']) == '' ) {
-			$resultOfUpdating = '<div class="notify notify--error mb-20">Год выхода фильма не может быть пустым.</div>';
+			$title = mysqli_real_escape_string($link, trim($_POST['previousTitle']));
 		} else {
-			$updatingQuery = "UPDATE films 
-				SET title = '" . mysqli_real_escape_string($link, trim($_POST['title'])) . "', 
-					genre = '" . mysqli_real_escape_string($link, trim($_POST['genre'])) . "', 
-					year = '" . mysqli_real_escape_string($link, trim($_POST['year'])) . "'
-					WHERE id = " . mysqli_real_escape_string($link, ($_GET['id'])) . " LIMIT 1
-			";
+			$title = mysqli_real_escape_string($link, trim($_POST['title']));
+		}
+		if ( trim($_POST['genre']) == '' ) {
+			$genre = mysqli_real_escape_string($link, trim($_POST['previousGenre']));
+		} else {
+			$genre = mysqli_real_escape_string($link, trim($_POST['genre']));
+		}
+		if ( trim($_POST['year']) == '' ) {
+			$year = mysqli_real_escape_string($link, trim($_POST['previousYear']));
+		} else {
+			$year = mysqli_real_escape_string($link, trim($_POST['year']));
+		}
+
+		$updatingQuery = "UPDATE films 
+			SET title = '$title', 
+				genre = '$genre', 
+				year = '$year'
+				WHERE id = " . mysqli_real_escape_string($link, ($_GET['id'])) . " LIMIT 1
+		";
 
 		if ( mysqli_query($link, $updatingQuery) ) {
 			$resultOfUpdating = '<div class="notify notify--info mb-20">Информация о фильме была изменена!</div>';
-		} else
+		} else {
 			$resultOfUpdating = '<div class="notify notify--error mb-20">Информация о фильме НЕ была изменена! Произошла ошибка</div>';
 		}
 	}
 
 	// Delete film from DB
 	if ( $_GET ) {
-		if ( $_GET['action'] == 'delete' ) {
+		if ( @$_GET['action'] == 'delete' ) {
 
 			// query for delete film
 			$query = "DELETE FROM films WHERE id = '" . mysqli_real_escape_string($link, $_GET['id']) . "'";
@@ -112,6 +121,9 @@
 						<div class="form-group"><label class="label">Год<input class="input" name="year" type="text" placeholder="<?=@$film['year']?>" /></label></div>
 					</div>
 				</div>
+				<input type="hidden" name="previousTitle" value="<?=@$film['title']?>" />
+				<input type="hidden" name="previousGenre" value="<?=@$film['genre']?>" />
+				<input type="hidden" name="previousYear" value="<?=@$film['year']?>" />
 				<input class="button" type="submit" name="editFilm" value="Изменить информацию" />
 				<a class="button button--removesmall" href="?action=delete&id=<?=$film['id']?>">Удалить</a>
 

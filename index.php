@@ -53,7 +53,7 @@
 	}
 
 	// QUERY for films
-	$query = "SELECT * FROM `films`";
+	$query = "SELECT * FROM `films` ORDER BY id DESC";
 	$films = array();
 
 	if ( $result = mysqli_query($link, $query) ) {
