@@ -19,31 +19,53 @@ function films_all($link) {
 // Add film to DB from Form
 function film_new($link, $title, $genre, $year) {
 
-	// Обработка ошибок
-	if ( $title == '' ) {
-		$errors[] = '<div class="notify notify--error mb-20">Название фильма не может быть пустым.</div>';
-	}
-	if ( $genre == '' ) {
-		$errors[] = '<div class="notify notify--error mb-20">Жанр фильма не может быть пустым.</div>';
-	}
-	if ( $year == '' ) {
-		$errors[] = '<div class="notify notify--error mb-20">Год выхода фильма не может быть пустым.</div>';
-	} 
-
-	if ( empty($errors) ) {
-		// Запись фильма в БД
-		$query = "INSERT INTO `films` (`title`, `genre`, `year`) VALUES (
-		'" . mysqli_real_escape_string($link, $title) . "',
-		'" . mysqli_real_escape_string($link, $genre) . "',
-		'" . mysqli_real_escape_string($link, $year) . "'
+	// Запись фильма в БД
+	$query = "INSERT INTO `films` (`title`, `genre`, `year`) VALUES (
+	'" . mysqli_real_escape_string($link, $title) . "',
+	'" . mysqli_real_escape_string($link, $genre) . "',
+	'" . mysqli_real_escape_string($link, $year) . "'
 	)";
 
 	if ( mysqli_query($link, $query) ) {
-		$resultSuccess = '<div class="notify notify--success mb-20">Фильм был добавлен!</div>';
-	} else
-		$resultError = '<div class="notify error mb-20">Фильм НЕ был добавлен! Произошла ошибка</div>';
+		$result = true;
+	} else {
+		$result = false;
 	}
 
+	return $result;
+
+}
+
+// Getting film from DB
+function get_film($link, $id) {
+	// query for select 1 film
+	$query = "SELECT * FROM `films` WHERE id = '" . mysqli_real_escape_string($link, $id) . "' LIMIT 1";
+
+	$result = mysqli_query($link, $query);
+
+	if ( mysqli_affected_rows($link) == 1 ) {
+		$film = mysqli_fetch_array($result);
+	}
+	
+	return $film;
+
+}
+
+function film_update($link, $title, $genre, $year, $id) {
+	$query = "UPDATE films 
+		SET title = '" . mysqli_real_escape_string($link, $title) . "', 
+			genre = '" . mysqli_real_escape_string($link, $genre) . "', 
+			year = '" . mysqli_real_escape_string($link, $year) . "'
+			WHERE id = " . mysqli_real_escape_string($link, $id) . " LIMIT 1
+	";
+
+	if ( mysqli_query($link, $query) ) {
+		$result = true;
+	} else {
+		$result = false;
+	}
+
+	return $result;
 }
 
 ?>

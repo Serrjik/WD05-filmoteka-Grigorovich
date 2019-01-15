@@ -19,3 +19,8 @@
 <body class="index-page">
 
 	<div class="container user-content section-page">
+
+		<div class="admin-nav mb-50">
+			<a href="index.php" class="admin-nav__link">Все фильмы</a>
+			<a href="new.php" class="admin-nav__link">Добавить новый фильм</a>
+		</div>
