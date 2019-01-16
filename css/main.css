@@ -608,7 +608,7 @@ a.badge:active {
   border: 1px solid #B1BFC7;
   padding: 10px 15px 30px 15px;
   display: block;
-  min-height: 110px;
+  min-height: 100px;
   outline: none;
   -webkit-transition: border 0.4s ease-in-out, -webkit-box-shadow 0.4s ease-in-out;
   transition: border 0.4s ease-in-out, -webkit-box-shadow 0.4s ease-in-out;

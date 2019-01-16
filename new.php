@@ -22,7 +22,7 @@ if ( array_key_exists('newFilm', $_POST) && ($_POST['newFilm'] == "Добави�
 
 	// Если ошибок нет - записываем фильм в БД
 	if ( empty($errors) ) {
-		$result = film_new($link, trim($_POST['title']), trim($_POST['genre']), trim($_POST['year']));
+		$result = film_new($link, trim($_POST['title']), trim($_POST['genre']), trim($_POST['year']), trim($_POST['description']));
 
 		if ( $result ) {
 			$resultSuccess = "<p>Фильм был успешно добавлен!</p>";
@@ -34,6 +34,7 @@ if ( array_key_exists('newFilm', $_POST) && ($_POST['newFilm'] == "Добави�
 }
 
 include('views/head.tpl');
+include('views/notifications.tpl');
 include('views/new-film.tpl');
 include('views/footer.tpl');
 

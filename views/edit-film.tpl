@@ -1,15 +1,3 @@
-<?php if ( @$resultSuccess != '' ) { ?>
-	<div class="notify info-success"><?=$resultSuccess?></div>
-<?php } ?>
-
-<?php if ( @$resultInfo != '' ) { ?>
-	<div class="notify info-notification"><?=$resultInfo?></div>
-<?php } ?>
-
-<?php if ( @$resultError != '' ) { ?>
-	<div class="notify notify--error mb-20"><?=$resultError?></div>
-<?php } ?>
-
 <h1 class="title-1">Редактировать фильм</h1>
 
 <div class="panel-holder mt-80 mb-40">
@@ -45,6 +33,7 @@
 				</div>
 			</div>
 		</div>
+		<textarea class="textarea mb-20" name="description" placeholder="Введите описание фильма"><?=@$film['description']?></textarea>
 		<input class="button" type="submit" name="editFilm" value="Изменить информацию" />
 	</form>
 </div>

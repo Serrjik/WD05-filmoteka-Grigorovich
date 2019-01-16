@@ -1,0 +1,31 @@
+<div class="title-1">Информация о фильме</div>
+
+<div class="card mb-20">
+	<!-- row -->
+	<div class="row">
+		<!-- col -->
+		<div class="col">
+			<img src="http://wd05-filmoteka-grigorovich/data/films/tor-2017.jpg" alt="<?=$film['title']?>">
+		</div>
+		<!-- // col -->
+
+		<!-- col -->
+		<div class="col">
+			<div class="card__header">
+				<h4 class="title-4"><?=$film['title']?></h4>
+				<div>
+					<a class="button button--editsmall" href="edit.php?action=edit&id=<?=$film['id']?>">Редактировать</a>
+					<a class="button button--removesmall" href="index.php?action=delete&id=<?=$film['id']?>">Удалить</a>
+				</div>
+			</div>
+			<div class="badge"><?=$film['genre']?></div>
+			<div class="badge"><?=$film['year']?></div>
+			<div class="user-content">
+				<p><?=$film['description']?></p>
+			</div>
+		</div>
+		<!-- // col -->
+	</div>
+	<!-- // row -->
+
+</div>

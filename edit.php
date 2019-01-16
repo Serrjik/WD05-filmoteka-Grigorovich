@@ -23,7 +23,7 @@
 		// Если ошибок нет - сохраняем фильм
 		if ( empty($errors) ) {
 			// Запись фильма в БД
-			$result = film_update($link, trim($_POST['title']), trim($_POST['genre']), trim($_POST['year']), $_GET['id']);
+			$result = film_update($link, trim($_POST['title']), trim($_POST['genre']), trim($_POST['year']), $_GET['id'], $_POST['description']);
 
 			if ( $result ) {
 				$resultSuccess = 'Информация о фильме была изменена!';
@@ -38,6 +38,7 @@
 	$film = get_film($link, $_GET['id']);
 
 include('views/head.tpl');
+include('views/notifications.tpl');
 include('views/edit-film.tpl');
 include('views/footer.tpl');
 
