@@ -52,7 +52,37 @@ function get_film($link, $id) {
 
 }
 
-function film_update($link, $title, $genre, $year, $id, $description) {
+function film_update($link, $title, $genre, $year, $id, $description, $photo) {
+
+	echo "<pre>";
+	print_r($_FILES);
+	echo "</pre>";
+
+	if ( isset($_FILES['photo']['name']) && $_FILES['photo']['tmp_name'] != "" ) {
+		$fileName = $_FILES['photo']['name'];
+		$fileTmpLoc = $_FILES['photo']['tmp_name'];
+		$fileType = $_FILES['photo']['type'];
+		$fileSize = $_FILES['photo']['size'];
+		$fileErrorMsg = $_FILES['photo']['error'];
+		$kaboom = explode(".", $fileName);
+		$fileExt = end($kaboom);
+
+		list($width, $height) = getimagesize($fileTmpLoc);
+		if ( $width < 10 || $height < 10 ) {
+			$errors[] = 'That image has no dimensions';
+		}
+
+		$db_file_name = rand(100000000000, 999999999999) . "." . $fileExt;
+		if ( $fileSize > 2097152 ) {
+			$errors[] = 'Размер вашего изображения превышает 2 Мбайт';
+		} else if ( !preg_match("/\.(gif|jpg|jpeg|png)$/i", $fileName) ) {
+			$errors[] = 'Ваше изображения не соответствует типам gif, jpg, jpeg, png';
+		} else if ( $fileErrorMsg == 1 ) {
+			$errors[] = 'Произошла неизвестная ошибка';
+		}
+
+	}
+
 	$query = "UPDATE films 
 		SET title = '" . mysqli_real_escape_string($link, $title) . "', 
 			genre = '" . mysqli_real_escape_string($link, $genre) . "', 

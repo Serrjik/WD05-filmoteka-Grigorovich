@@ -2,7 +2,7 @@
 
 <div class="panel-holder mt-80 mb-40">
 
-	<form action="edit.php?id=<?=@$film['id']?>" method="POST">
+	<form enctype="multipart/form-data" action="edit.php?id=<?=@$film['id']?>" method="POST">
 
 		<?php
 		if ( !empty($errors) ) {
@@ -34,6 +34,9 @@
 			</div>
 		</div>
 		<textarea class="textarea mb-20" name="description" placeholder="Введите описание фильма"><?=@$film['description']?></textarea>
+		<div class="mb-20">
+			<input type="file" name="photo">
+		</div>
 		<input class="button" type="submit" name="editFilm" value="Изменить информацию" />
 	</form>
 </div>
