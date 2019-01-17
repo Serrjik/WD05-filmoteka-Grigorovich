@@ -54,9 +54,9 @@ function get_film($link, $id) {
 
 function film_update($link, $title, $genre, $year, $id, $description, $photo) {
 
-	echo "<pre>";
+/*	echo "<pre>";
 	print_r($_FILES);
-	echo "</pre>";
+	echo "</pre>";*/
 
 	if ( isset($_FILES['photo']['name']) && $_FILES['photo']['tmp_name'] != "" ) {
 		$fileName = $_FILES['photo']['name'];
@@ -81,13 +81,34 @@ function film_update($link, $title, $genre, $year, $id, $description, $photo) {
 			$errors[] = 'Произошла неизвестная ошибка';
 		}
 
+		$photoFolderLocation = ROOT . 'data/films/full/';
+		$photoFolderLocationMin = ROOT . 'data/films/min/';
+		// $photoFolderLocationFull = ROOT . 'data/films/full/';
+
+		$uploadfile = $photoFolderLocation . $db_file_name;
+		$moveResult = move_uploaded_file($fileTmpLoc, $uploadfile);
+
+		if ( $moveResult != true ) {
+			$errors[] = 'Не удалось загрузить файл';
+		}
+
+		require_once(ROOT . "functions/image_resize_imagick.php");
+
+		$target_file = $photoFolderLocation . $db_file_name;
+		$resized_file = $photoFolderLocationMin . $db_file_name;
+		$wmax = 137;
+		$hmax = 200;
+		$img = createThumbnail($target_file, $wmax, $hmax);
+		$img->writeImage($resized_file);
+
 	}
 
 	$query = "UPDATE films 
 		SET title = '" . mysqli_real_escape_string($link, $title) . "', 
 			genre = '" . mysqli_real_escape_string($link, $genre) . "', 
 			year = '" . mysqli_real_escape_string($link, $year) . "',
-			description = '" . mysqli_real_escape_string($link, $description) . "'
+			description = '" . mysqli_real_escape_string($link, $description) . "',
+			photo = '" . mysqli_real_escape_string($link, $db_file_name) . "'
 			WHERE id = " . mysqli_real_escape_string($link, $id) . " LIMIT 1
 	";
 

@@ -20,6 +20,14 @@
 			$errors[] = 'Год выхода фильма не может быть пустым.';
 		}
 
+		echo "<pre>";
+		print_r($_POST);
+		echo "<br>";
+		print_r($_POST['photo']);
+		echo "<br>";
+		print_r(photo);
+		echo "</pre>";
+
 		// Если ошибок нет - сохраняем фильм
 		if ( empty($errors) ) {
 			// Запись фильма в БД

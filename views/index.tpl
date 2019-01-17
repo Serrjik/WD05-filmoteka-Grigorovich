@@ -6,7 +6,7 @@
 		<div class="row">
 			<!-- col-auto -->
 			<div class="col-auto">
-				<img height="200" src="<?=HOST?>data/films/tor-2017.jpg" alt="<?=$film['title']?>">
+				<img height="200" src="<?=HOST?>data/films/min/<?=$film['photo']?>" alt="<?=$film['title']?>">
 			</div>
 			<!-- // col-auto -->
 			<!-- col -->
