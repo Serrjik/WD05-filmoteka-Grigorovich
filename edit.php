@@ -21,17 +21,14 @@
 		}
 
 		echo "<pre>";
-		print_r($_POST);
-		echo "<br>";
-		print_r($_POST['photo']);
-		echo "<br>";
-		print_r(photo);
+		echo "FILES['photo']:";
+		print_r($_FILES['photo']);
 		echo "</pre>";
 
 		// Если ошибок нет - сохраняем фильм
 		if ( empty($errors) ) {
 			// Запись фильма в БД
-			$result = film_update($link, trim($_POST['title']), trim($_POST['genre']), trim($_POST['year']), $_GET['id'], $_POST['description'], $_POST['photo']);
+			$result = film_update($link, trim($_POST['title']), trim($_POST['genre']), trim($_POST['year']), $_GET['id'], $_POST['description'], $_FILES['photo']);
 
 			if ( $result ) {
 				$resultSuccess = 'Информация о фильме была изменена!';
