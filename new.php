@@ -22,7 +22,7 @@ if ( array_key_exists('newFilm', $_POST) && ($_POST['newFilm'] == "Добави�
 
 	// Если ошибок нет - записываем фильм в БД
 	if ( empty($errors) ) {
-		$result = film_new($link, trim($_POST['title']), trim($_POST['genre']), trim($_POST['year']), trim($_POST['description']));
+		$result = film_new($link, trim($_POST['title']), trim($_POST['genre']), trim($_POST['year']), trim($_POST['description']), $_FILES['photo']);
 
 		if ( $result ) {
 			$resultSuccess = "<p>Фильм был успешно добавлен!</p>";
