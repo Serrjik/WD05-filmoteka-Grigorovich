@@ -9,7 +9,7 @@ require('models/films.php');
 
 // Delete film from DB
 if ( $_GET ) {
-	if ( $_GET['action'] == 'delete' ) {
+	if ( @$_GET['action'] == 'delete' ) {
 
 		$result = film_delete($link, $_GET['id']);
 
@@ -22,11 +22,11 @@ if ( $_GET ) {
 
 }
 
-$films = films_all($link);
+$film = get_film($link, $_GET['id']);
 
 include('views/head.tpl');
 include('views/notifications.tpl');
-include('views/index.tpl');
+include('views/film-single.tpl');
 include('views/footer.tpl');
 
 ?>
