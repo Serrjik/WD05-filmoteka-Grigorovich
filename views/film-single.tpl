@@ -14,7 +14,7 @@
 			<div class="card__header">
 				<h4 class="title-4"><?=$film['title']?></h4>
 				<div>
-					<a class="button button--editsmall" href="edit.php?action=edit&id=<?=$film['id']?>">Редактировать</a>
+					<a class="button button--editsmall mb-20" href="edit.php?action=edit&id=<?=$film['id']?>">Редактировать</a>
 					<a class="button button--removesmall" href="index.php?action=delete&id=<?=$film['id']?>">Удалить</a>
 				</div>
 			</div>
