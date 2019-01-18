@@ -1,4 +1,14 @@
 <?php
+
+	// setcookie ( string $name [, string $value = "" [, int $expire = 0 [, string $path = "" [, string $domain = "" [, bool $secure = FALSE [, bool $httponly = FALSE ]]]]]] ) : bool
+
+	setcookie('city', 'Березино', time() + 60*60*24*40, '/', 'wd05-filmoteka-grigorovich');
+	// setcookie('city', '', time() - 60*60*24*40);
+
+	if ( isset($_COOKIE['city']) ) {
+		echo $_COOKIE['city']. "<br>";
+	}
+
 	require_once ('header.tpl'); // подключение файла
 	echo "<br>";
 	require_once ('header.tpl'); // подключение файла
