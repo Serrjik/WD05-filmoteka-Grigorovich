@@ -22,7 +22,8 @@ function film_new($link, $title, $genre, $year, $description = '', $photo) {
 	if ( isset($_FILES['photo']['name']) && $_FILES['photo']['tmp_name'] != "" ) {
 		require_once(ROOT . "functions/stored_image_name.php");
 		$db_file_name = getStoredImageName($photo);
-
+	} else {
+		$db_file_name = '';
 	}
 
 	// Запись фильма в БД
