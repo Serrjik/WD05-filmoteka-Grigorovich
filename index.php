@@ -2,11 +2,32 @@
 
 	// setcookie ( string $name [, string $value = "" [, int $expire = 0 [, string $path = "" [, string $domain = "" [, bool $secure = FALSE [, bool $httponly = FALSE ]]]]]] ) : bool
 
+	// Инициализируем сессию:
+	session_start();
+
+	// Пишем в сессию:
+	$_SESSION['name'] = 'Serjik';
+	$_SESSION['city'] = 'Березино';
+
 	setcookie('city', 'Березино', time() + 60*60*24*40, '/', 'wd05-filmoteka-grigorovich');
 	// setcookie('city', '', time() - 60*60*24*40);
 
+	// Выведем переменную name из сессии:
+	echo $_SESSION['name']. "<br>";
+	echo $_SESSION['city']. "<br>";
+
+	// После выполнения этой команды значение $_SESSION['name'] станет null
+	// unset($_SESSION['name']);
+
+	// Выведем переменную name из сессии:
+	// echo $_SESSION['name']. "<br>";
+	// echo $_SESSION['city']. "<br>";
+
+	// После выполнения этой команды значения ВСЕХ переменных сессии станут null
+	// session_destroy();
+
 	if ( isset($_COOKIE['city']) ) {
-		echo $_COOKIE['city']. "<br>";
+		// echo $_COOKIE['city']. "<br>";
 	}
 
 	require_once ('header.tpl'); // подключение файла
@@ -130,6 +151,8 @@
 		?>
 	</tbody>
 </table>
+
+<a href="page-2.php">Page 2</a>
 
 <h2>ФОРМА ДОБАВЛЕНИЯ ПОЛЬЗОВАТЕЛЯ</h2>
 
