@@ -6,6 +6,7 @@
 	$link = db_connect();
 
 	require('models/films.php');
+	require('functions/login-functions.php');
 
 	// Set initial values of variables
 	$errors = array();

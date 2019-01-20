@@ -4,6 +4,7 @@
 require('config.php');
 require('database.php');
 require('models/films.php');
+require('functions/login-functions.php');
 
 $link = db_connect();
 
