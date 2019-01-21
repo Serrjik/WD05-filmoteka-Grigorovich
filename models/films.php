@@ -63,20 +63,26 @@ function get_film($link, $id) {
 function film_update($link, $title, $genre, $year, $id, $description, $photo) {
 
 	if ( isset($_FILES['photo']['name']) && $_FILES['photo']['tmp_name'] != "" ) {
-
 		require_once(ROOT . "functions/stored_image_name.php");
 		$db_file_name = getStoredImageName($photo);
 
+		$query = "UPDATE films 
+			SET title = '" . mysqli_real_escape_string($link, $title) . "', 
+				genre = '" . mysqli_real_escape_string($link, $genre) . "', 
+				year = '" . mysqli_real_escape_string($link, $year) . "',
+				description = '" . mysqli_real_escape_string($link, $description) . "',
+				photo = '" . mysqli_real_escape_string($link, $db_file_name) . "'
+				WHERE id = " . mysqli_real_escape_string($link, $id) . " LIMIT 1
+		";
+	} else {
+		$query = "UPDATE films 
+			SET title = '" . mysqli_real_escape_string($link, $title) . "', 
+				genre = '" . mysqli_real_escape_string($link, $genre) . "', 
+				year = '" . mysqli_real_escape_string($link, $year) . "',
+				description = '" . mysqli_real_escape_string($link, $description) . "'
+				WHERE id = " . mysqli_real_escape_string($link, $id) . " LIMIT 1
+		";
 	}
-
-	$query = "UPDATE films 
-		SET title = '" . mysqli_real_escape_string($link, $title) . "', 
-			genre = '" . mysqli_real_escape_string($link, $genre) . "', 
-			year = '" . mysqli_real_escape_string($link, $year) . "',
-			description = '" . mysqli_real_escape_string($link, $description) . "',
-			photo = '" . mysqli_real_escape_string($link, $db_file_name) . "'
-			WHERE id = " . mysqli_real_escape_string($link, $id) . " LIMIT 1
-	";
 
 	if ( mysqli_query($link, $query) ) {
 		$result = true;
