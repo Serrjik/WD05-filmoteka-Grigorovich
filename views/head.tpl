@@ -37,12 +37,13 @@
 		<?php } ?>
 		</div>
 
-	<?php if ( isset($_COOKIE['user-name']) ): ?>
-		<div class="mb-50">
-			<?php if ( isset($_COOKIE['user-city']) ): ?>
-				Привет, <?=$_COOKIE['user-name']?> из <?=$_COOKIE['user-city']?>!
-			<?php else: ?>
-				Привет, <?=$_COOKIE['user-name']?>!
-			<?php endif ?>
-		</div>
-	<?php endif ?>
+		<?php if ( isAdmin() ) {
+			if ( isset($_COOKIE['user-name']) ) { ?>
+				<div class="mb-50">
+					<?php if ( isset($_COOKIE['user-city']) ): ?>
+						Привет, <?=$_COOKIE['user-name']?> из <?=$_COOKIE['user-city']?>!
+					<?php else: ?>
+						Привет, <?=$_COOKIE['user-name']?>!
+					<?php endif ?>
+				</div>
+		<?php } } ?>

@@ -1,3 +1,7 @@
+<?php if ( @$errorLogin != '' ) { ?>
+	<div class="notify notify--error mb-20"><?=$errorLogin?></div>
+<?php } ?>
+
 <h1>Вход для администратора</h1>
 
 <form action="login.php" method="POST" class="mb-50">

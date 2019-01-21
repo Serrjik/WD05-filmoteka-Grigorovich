@@ -1,18 +1,22 @@
 <?php
 
 require('config.php');
+require('database.php');
+$link = db_connect();
+require('models/films.php');
 require('functions/login-functions.php');
 
 if ( isset($_POST['enter']) ) {
-	$userName = 'admin';
-	$userPassword = '123456';
 
-	if ( $_POST['login'] == $userName ) {
-		if ( $_POST['password'] == $userPassword ) {
-			$_SESSION['user'] = 'admin';
-			header('Location: ' . HOST . 'index.php');
-		}		
+	$user = check_admin($link, trim($_POST['login']), trim($_POST['password']));
+
+	if ( $user == false ) {
+		$errorLogin = "Неправильное имя пользователя или пароль!";
+	} else {
+		$_SESSION['user'] = 'admin';
+		header('Location: ' . HOST . 'index.php');
 	}
+
 }
 
 if ( isset($_POST['user-submit']) ) {

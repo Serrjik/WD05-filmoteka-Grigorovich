@@ -102,4 +102,18 @@ function film_delete($link, $id) {
 	return $result;
 }
 
+// Получить данные из таблицы с логином и паролем админа сайта
+function check_admin($link, $username, $password) {
+
+	$query = "SELECT * FROM `admin` 
+	WHERE username = '" . mysqli_real_escape_string($link, $username) . "' 
+		AND password = '" . mysqli_real_escape_string($link, $password) . "' LIMIT 1";
+
+	if ( $result = mysqli_query($link, $query) ) {
+		$user = mysqli_fetch_array($result);
+	}
+
+	return $user;
+}
+
 ?>
