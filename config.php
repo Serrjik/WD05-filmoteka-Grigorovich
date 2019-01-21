@@ -6,6 +6,7 @@ define('MYSQL_PASSWORD', '');
 define('MYSQL_DB', 'WD05-filmoteka-Grigorovich');
 define('HOST', 'http://'. $_SERVER['HTTP_HOST'] . '/');
 define('ROOT', dirname(__FILE__) . '/');
+session_start();
 
 // $image = new Imagick();
 // $image->newImage(1, 1, new ImagickPixel('#ffffff'));

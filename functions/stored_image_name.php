@@ -1,5 +1,6 @@
 <?php
 
+// Возвращает имя файла изображения в БД при загрузке на сайт
 function getStoredImageName($image) {
 	$fileName = $image['name'];
 	$fileTmpLoc =$image['tmp_name'];
