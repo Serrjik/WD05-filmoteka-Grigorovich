@@ -29,23 +29,26 @@ class Person {
 	public $speciality;
 	public $age;
 
-	// function __construct(argument)
-	// {
-	// 	# code...
-	// }
+	public function __construct($name, $spec, $age) {
+		$this->name = $name;
+		$this->speciality = $spec;
+		$this->age = $age;
+	}
 
-	public function greeting($name, $spec, $age) {
-		echo "Hello! My name is $name. I am $spec and $age years old.";
+	public function greeting() {
+		// echo "Hello! My name is $name. I am $spec and $age years old.";
+		echo "Hello! My name is " . $this->name . ". I am  " . $this->speciality . " and  " . $this->age . " years old.";
 	}
 
 }
 
 // Создание экземпляра объекта
-$person1 = new Person;
+$person1 = new Person('Peter', 'Programmer', 25);
+// echo $person1->name;
 
-$person1->name = 'Peter';
-$person1->speciality = 'Programmer';
-$person1->age = 25;
+// $person1->name = 'Peter';
+// $person1->speciality = 'Programmer';
+// $person1->age = 25;
 
 // Обращение к свойству объекта
 // $ пишем только вначале
@@ -53,6 +56,12 @@ $person1->age = 25;
 // echo $person1->speciality . "<br>";
 // echo $person1->age . "<br>";
 
-$person1->greeting($person1->name, $person1->speciality, $person1->age);
+// $person1->greeting($person1->name, $person1->speciality, $person1->age);
+$person1->greeting();
+
+echo "<br><br>";
+
+$person2 = new Person('Jane', 'Web-designer', 23);
+$person2->greeting();
 
 ?>
