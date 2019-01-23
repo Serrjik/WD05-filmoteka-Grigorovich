@@ -53,11 +53,11 @@ while ( $result->fetch(PDO::FETCH_ASSOC) ) {
 // Выбор данных из БД с защитой
 // -------------------------------
 
-$db = new PDO('mysql:host=localhost;dbname=mini-site', 'root', '');
+$db = new PDO('mysql:host=localhost;dbname=new-mini-site', 'root', '');
 
 // 1. Выборка без защиты от SQL инъекции
 $username = 'Joker';
-$password = '654321';
+$password = '555';
 
 // $sql = "SELECT * FROM users WHERE name = '{$username}' AND password = '{$password}' LIMIT 1";
 // $result = $db->query($sql);
@@ -72,33 +72,79 @@ echo "</pre>";*/
 	echo "Пароль пользователя: {$user['email']}<br>";
 }*/
 
-// 2. Выборка с защитой от SQL инъекции - В РУЧНОМ режиме
+// 2. Выборка с защитой от SQL инъекции - В РУЧНОМ режиме - НЕ рекомендуется использовать. Лучше следующий метод
 
 // функция quote() заключает строку в кавычки (если требуется) и экранирует специальные символы внутри строки подходящим для драйвера способом
-$db->quote( $username );
+// $db->quote( $username );
 // функция strtr() экранирует символы (делает замену одних символов на другие, преобразует заданные символы)
-$username = strtr($username, array('_' => '\_', '%' => '\%'));
+// $username = strtr($username, array('_' => '\_', '%' => '\%'));
 
-$db->quote( $password );
-$password = strtr($password, array('_' => '\_', '%' => '\%'));
+/*$db->quote( $password );
+$password = strtr($password, array('_' => '\_', '%' => '\%'));*/
 
 // $sql = "SELECT * FROM users WHERE name = '{$username}' AND password = '{$password}' LIMIT 1";
 
-$result = $db->query($sql);
+/*$result = $db->query($sql);
 
-echo "<h2>Выборка записи с защитой от SQL инъекции - В РУЧНОМ режиме:</h2>";
+echo "<h2>Выборка записи с защитой от SQL инъекции - В РУЧНОМ режиме:</h2>";*/
 // echo "<pre>";
 // print_r( $result->fetch(PDO::FETCH_ASSOC) );
 // echo "</pre>";
-if ( $result->rowCount() == 1 ) {
+/*if ( $result->rowCount() == 1 ) {
 	$user = $result->fetch(PDO::FETCH_ASSOC);
 	echo "Имя пользователя: {$user['name']}<br>";
 	echo "Пароль пользователя: {$user['email']}<br>";
-}
+}*/
 
 // 3. Выборка с защитой от SQL инъекции - В АВТОМАТИЧЕСКОМ режиме
 // В переменные :username и :password будут подставляться нужные значения
-$sql = "SELECT * FROM users WHERE name = :username AND password = :password LIMIT 1";
+// $sql = "SELECT * FROM users WHERE name = :username AND password = :password LIMIT 1";
+// // Метод prepare() подготавливает SQL-запрос
+// $stmt = $db->prepare($sql);
 
+// // Подставляем пользовательские данные в подготовленный SQL-запрос (более наглядный вариант с точки зрения чтения кода)
+// $stmt->bindValue(':username', $username);
+// $stmt->bindValue(':password', $password);
+// $stmt->execute();
+
+// // Если не хотим для каждого значения вызывать метод bindValue то можно сразу в ->execute
+// // $stmt->execute(array(':username' => $username, ':password' => $password));
+
+// $stmt->bindColumn('name', $name);
+// $stmt->bindColumn('email', $email);
+
+// echo "<h2>Выборка записи с автоматической защитой от SQL инъекции:</h2>";
+// $stmt->fetch();
+// echo "Имя пользователя: {$name}<br>";
+// echo "Email пользователя: {$email}<br>";
+
+// 4. Выборка с защитой от SQL инъекции - В АВТОМАТИЧЕСКОМ режиме - ТОЛЬКО ДРУГОЙ ФОРМАТ ЗАПРОСА
+$sql = "SELECT * FROM users WHERE name = ? AND password = ? LIMIT 1";
+$stmt = $db->prepare($sql);
+
+// Передаём пользовательские переменные в функцию htmlentities() для преобразования переменных (заменяет символы типа < на выражения типа &lt;) с целью защиты от межсайтового скриптинга (XSS-атак)
+$username = htmlentities($username);
+$password = htmlentities($password);
+
+// Передаём в метод bindValue() первый по очереди параметр в SQL-запросе и переменную, которую нужно подставить на его место.
+// Затем второй по очереди параметр в SQL-запросе и переменную, которую нужно подставить на его место.
+/*$stmt->bindValue(1, $username);
+$stmt->bindValue(2, $password);
+$stmt->execute();*/
+
+$stmt->bindColumn('name', $name);
+$stmt->bindColumn('email', $email);
+
+// Более краткий вариант записи:
+$stmt->execute( array($username, $password) );
+
+echo "<h2>Выборка записи с автоматической защитой от SQL инъекции:</h2>";
+$stmt->fetch();
+echo "Имя пользователя: {$name}<br>";
+echo "Email пользователя: {$email}<br>";
+
+$string = "<script>Hello from script</script>";
+$string = htmlentities($string);
+echo $string;
 
 ?>
