@@ -1,37 +1,41 @@
 <?php
 
+// -------------------------------
+// Простой выбор данных из БД
+// -------------------------------
+
 // Подключение к БД через PDO
 // $db - объект PDO
 // new PDO(тип БД и имя хоста и имя БД, имя пользователя, пароль, 4-й необязательный параметр с настройками)
-/*$db = new PDO('mysql:host=localhost;dbname=WD05-filmoteka-Grigorovich', 'root', '');
+$db = new PDO('mysql:host=localhost;dbname=WD05-filmoteka-Grigorovich', 'root', '');
 
-$sql = "SELECT * FROM films";*/
+$sql = "SELECT * FROM films";
 
 // Метод query() выполняет запросы. Возвращает объект PDO
-// $result = $db->query($sql);
+$result = $db->query($sql);
 
 // 1.
-// echo "<h2>Вывод записей из результата по одной: </h2>";
+echo "<h2>Вывод записей из результата по одной: </h2>";
 
 // Метод fetch() возвращает каждый раз по одной записи из БД
-/*while ( $film = $result->fetch(PDO::FETCH_ASSOC) ) {
+while ( $film = $result->fetch(PDO::FETCH_ASSOC) ) {
 	// echo "<pre>";
 	// print_r($film);
 	// echo "</pre>";
 	echo "Название фильма: " . $film['title'] . "<br>";
 	echo "Жанр фильма: " . $film['genre'] . "<br><br>";
-}*/
+}
 
 // 2.
 // Метод fetchAll() возвращает сразу все данные, что были получены
-/*$films = $result->fetchAll(PDO::FETCH_ASSOC);
+// $films = $result->fetchAll(PDO::FETCH_ASSOC);
 
-echo "<h2>Выборка всех записей в массив и вывод на экран:</h2>";
+/*echo "<h2>Выборка всех записей в массив и вывод на экран:</h2>";
 foreach ($films as $film) {
 	echo "Название фильма: " . $film['title'] . "<br>";
 	echo "Жанр фильма: " . $film['genre'] . "<br><br>";
-}*/
-
+}
+*/
 // 3.
 // Вывод всех значений в переменные
 // Метод bindColumn() берет каждую колонку из таблицы для каждого фильма и будет создавать для неё переменную
@@ -151,9 +155,9 @@ echo $string;*/
 // Вставка данных в БД
 // ---------------------------
 
-$db = new PDO('mysql:host=localhost;dbname=new-mini-site', 'root', '');
+// $db = new PDO('mysql:host=localhost;dbname=new-mini-site', 'root', '');
 
-// Готовим запрос в БД
+/*// Готовим запрос в БД
 // :name, :email, :password - плэйсхолдеры, куда будет подставляться информация
 $sql = "INSERT INTO users (name, email, password) VALUES (:name, :email, :password)";
 $stmt = $db->prepare($sql);
@@ -174,6 +178,38 @@ $stmt->execute();
 // Метод rowCount() возвращает количество строк, затронутых последним SQL-запросом
 echo "<p>Было затронуто строк: " . $stmt->rowCount() . "</p>";
 // Метод lastInsertId() возвращает ID последней вставленной строки или значение последовательности
-echo "<p>ID вставленной записи: " . $db->lastInsertId() . "</p>";
+echo "<p>ID вставленной записи: " . $db->lastInsertId() . "</p>";*/
+
+// ---------------------------
+// Обновление данных
+// ---------------------------
+
+/*$sql = "UPDATE users SET name = :name WHERE id = :id";
+
+// Обработка данных
+$stmt = $db->prepare($sql);
+
+$username = "New Flash";
+$id = '13';
+
+$stmt->bindValue(':name', $username);
+$stmt->bindValue(':id', $id);
+$stmt->execute();
+
+echo "<p>Было затронуто строк: " . $stmt->rowCount() . "</p>";*/
+
+// ---------------------------
+// Удаление данных
+// ---------------------------
+
+/*$sql = "DELETE FROM users WHERE name = :name";
+$stmt = $db->prepare($sql);
+
+$username = "New Flash";
+
+$stmt->bindValue(':name', $username);
+$stmt->execute();
+
+echo "<p>Было затронуто строк: " . $stmt->rowCount() . "</p>";*/
 
 ?>
