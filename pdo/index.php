@@ -53,11 +53,11 @@ while ( $result->fetch(PDO::FETCH_ASSOC) ) {
 // Выбор данных из БД с защитой
 // -------------------------------
 
-$db = new PDO('mysql:host=localhost;dbname=new-mini-site', 'root', '');
+// $db = new PDO('mysql:host=localhost;dbname=new-mini-site', 'root', '');
 
 // 1. Выборка без защиты от SQL инъекции
-$username = 'Joker';
-$password = '555';
+/*$username = 'Joker';
+$password = '555';*/
 
 // $sql = "SELECT * FROM users WHERE name = '{$username}' AND password = '{$password}' LIMIT 1";
 // $result = $db->query($sql);
@@ -119,12 +119,12 @@ echo "<h2>Выборка записи с защитой от SQL инъекци�
 // echo "Email пользователя: {$email}<br>";
 
 // 4. Выборка с защитой от SQL инъекции - В АВТОМАТИЧЕСКОМ режиме - ТОЛЬКО ДРУГОЙ ФОРМАТ ЗАПРОСА
-$sql = "SELECT * FROM users WHERE name = ? AND password = ? LIMIT 1";
-$stmt = $db->prepare($sql);
+/*$sql = "SELECT * FROM users WHERE name = ? AND password = ? LIMIT 1";
+$stmt = $db->prepare($sql);*/
 
 // Передаём пользовательские переменные в функцию htmlentities() для преобразования переменных (заменяет символы типа < на выражения типа &lt;) с целью защиты от межсайтового скриптинга (XSS-атак)
-$username = htmlentities($username);
-$password = htmlentities($password);
+/*$username = htmlentities($username);
+$password = htmlentities($password);*/
 
 // Передаём в метод bindValue() первый по очереди параметр в SQL-запросе и переменную, которую нужно подставить на его место.
 // Затем второй по очереди параметр в SQL-запросе и переменную, которую нужно подставить на его место.
@@ -132,19 +132,48 @@ $password = htmlentities($password);
 $stmt->bindValue(2, $password);
 $stmt->execute();*/
 
-$stmt->bindColumn('name', $name);
-$stmt->bindColumn('email', $email);
+/*$stmt->bindColumn('name', $name);
+$stmt->bindColumn('email', $email);*/
 
 // Более краткий вариант записи:
-$stmt->execute( array($username, $password) );
+// $stmt->execute( array($username, $password) );
 
-echo "<h2>Выборка записи с автоматической защитой от SQL инъекции:</h2>";
+/*echo "<h2>Выборка записи с автоматической защитой от SQL инъекции:</h2>";
 $stmt->fetch();
 echo "Имя пользователя: {$name}<br>";
 echo "Email пользователя: {$email}<br>";
 
 $string = "<script>Hello from script</script>";
 $string = htmlentities($string);
-echo $string;
+echo $string;*/
+
+// ---------------------------
+// Вставка данных в БД
+// ---------------------------
+
+$db = new PDO('mysql:host=localhost;dbname=new-mini-site', 'root', '');
+
+// Готовим запрос в БД
+// :name, :email, :password - плэйсхолдеры, куда будет подставляться информация
+$sql = "INSERT INTO users (name, email, password) VALUES (:name, :email, :password)";
+$stmt = $db->prepare($sql);
+
+$username = 'Flash';
+$useremail = 'flash@gmail.com';
+$password = '777';
+
+// 1-й вариант подстановки
+$stmt->bindValue(':name', $username );
+$stmt->bindValue(':email', $useremail );
+$stmt->bindValue(':password', $password );
+$stmt->execute();
+
+// 2-й вариант подстановки
+// $stmt->execute(array(':name' => $username, ':email' => $useremail, ':password' => $password));
+
+// Метод rowCount() возвращает количество строк, затронутых последним SQL-запросом
+echo "<p>Было затронуто строк: " . $stmt->rowCount() . "</p>";
+// Метод lastInsertId() возвращает ID последней вставленной строки или значение последовательности
+echo "<p>ID вставленной записи: " . $db->lastInsertId() . "</p>";
 
 ?>
